@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kaspi Komek - Подключение</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Заголовок -->
+        <div class="header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect width="32" height="32" rx="8" fill="#F14635"/>
+                    <path d="M8 16L14 22L24 10" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h1>Подключение Kaspi</h1>
+            <p class="subtitle">Введите данные вашего магазина</p>
+        </div>
+
+        <!-- Форма -->
+        <form id="kaspiAuthForm" class="auth-form">
+            <!-- Логин -->
+            <div class="form-group">
+                <label for="login">
+                    <span class="label-icon">👤</span>
+                    Логин Kaspi Магазин
+                </label>
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="login" 
+                        name="login" 
+                        placeholder="seller@example.com или +7 XXX XXX XX XX"
+                        autocomplete="username"
+                        required
+                    >
+                    <span class="input-status"></span>
+                </div>
+                <p class="hint">Введите email или номер телефона, привязанный к Kaspi</p>
+            </div>
+
+            <!-- Пароль -->
+            <div class="form-group">
+                <label for="password">
+                    <span class="label-icon">🔐</span>
+                    Пароль
+                </label>
+                <div class="input-wrapper">
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        placeholder="••••••••"
+                        autocomplete="current-password"
+                        required
+                    >
+                    <button type="button" class="toggle-password" aria-label="Показать пароль">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                            <path d="M10 4C4 4 1 10 1 10C1 10 4 16 10 16C16 16 19 10 19 10C19 10 16 4 10 4Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                            <circle cx="10" cy="10" r="3" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                        </svg>
+                    </button>
+                </div>
+                <p class="hint">Пароль от личного кабинета Kaspi Магазин</p>
+            </div>
+
+            <!-- API Токен -->
+            <div class="form-group">
+                <label for="token">
+                    <span class="label-icon">🔑</span>
+                    API Токен
+                </label>
+                <div class="input-wrapper">
+                    <textarea 
+                        id="token" 
+                        name="token" 
+                        placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                        rows="3"
+                        required
+                    ></textarea>
+                    <button type="button" class="paste-button" aria-label="Вставить из буфера">
+                        📋
+                    </button>
+                </div>
+                <p class="hint">
+                    <a href="#" id="showTokenHelp" class="link">Где найти API токен?</a>
+                    • Настройки магазина → API интеграция
+                </p>
+            </div>
+
+            <!-- Дополнительные настройки -->
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="saveCredentials" checked>
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-text">Сохранить данные для автоподключения</span>
+                </label>
+            </div>
+
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="autoAcceptOrders" checked>
+                    <span class="checkbox-custom"></span>
+                    <span class="checkbox-text">Автоматически принимать новые заказы</span>
+                </label>
+            </div>
+
+            <!-- Статус прокси -->
+            <div class="proxy-section">
+                <button type="button" class="proxy-toggle" id="proxyToggle">
+                    <span class="toggle-icon">🌐</span>
+                    <span>Использовать прокси</span>
+                    <span class="toggle-arrow">▼</span>
+                </button>
+                
+                <div class="proxy-content" id="proxyContent" style="display: none;">
+                    <div class="form-group">
+                        <label for="proxyUrl">
+                            <span class="label-icon">🔄</span>
+                            Прокси сервер
+                        </label>
+                        <input 
+                            type="text" 
+                            id="proxyUrl" 
+                            name="proxyUrl" 
+                            placeholder="http://host:port/"
+                        >
+                        <p class="hint">
+                            Форматы: http://host:port/, https://host:port/, socks4://host:port/, socks5://host:port/
+                        </p>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group half">
+                            <label for="proxyLogin">Логин (опционально)</label>
+                            <input type="text" id="proxyLogin" name="proxyLogin" placeholder="user">
+                        </div>
+                        <div class="form-group half">
+                            <label for="proxyPassword">Пароль</label>
+                            <input type="password" id="proxyPassword" name="proxyPassword" placeholder="••••">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Кнопки -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span class="btn-text">Подключить</span>
+                    <span class="btn-loader" style="display: none;">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2" fill="none" stroke-dasharray="40" stroke-dashoffset="20">
+                                <animateTransform attributeName="transform" type="rotate" from="0 10 10" to="360 10 10" dur="1s" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                    </span>
+                </button>
+                <button type="button" class="btn btn-secondary" id="testConnectionBtn">
+                    🔍 Проверить подключение
+                </button>
+            </div>
+
+            <!-- Справка -->
+            <div class="help-section">
+                <button type="button" class="help-toggle" id="helpToggle">
+                    <span>📖 Как получить данные?</span>
+                    <span class="toggle-arrow">▼</span>
+                </button>
+                
+                <div class="help-content" id="helpContent" style="display: none;">
+                    <div class="help-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <strong>Войдите в Kaspi Магазин</strong>
+                            <p>Перейдите на kaspi.kz и войдите в личный кабинет продавца</p>
+                        </div>
+                    </div>
+                    <div class="help-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <strong>Откройте настройки API</strong>
+                            <p>Настройки → API интеграция → Создать токен</p>
+                        </div>
+                    </div>
+                    <div class="help-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <strong>Скопируйте токен</strong>
+                            <p>Нажмите "Скопировать" и вставьте в поле выше</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Сообщения об ошибках/успехе -->
+        <div id="messageContainer" class="message-container" style="display: none;"></div>
+    </div>
+
+    <script src="js/telegram.js"></script>
+    <script src="js/form.js"></script>
+</body>
+</html>
