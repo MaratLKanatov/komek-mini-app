@@ -192,9 +192,9 @@ function submitForm() {
         showMessage('✅ Данные отправлены! Окно закроется автоматически.', 'success');
         
         // Закрываем Mini App через 1 секунду
-        setTimeout(() => {
-            tg.close();
-        }, 1000);
+        // setTimeout(() => {
+        //     tg.close();
+        // }, 1000);
         
         window.formModified = false;
         
